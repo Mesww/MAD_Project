@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mutu/registerandlogin/login.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Forgetpassword extends StatefulWidget {
   const Forgetpassword({Key? key}) : super(key: key);
@@ -70,8 +71,8 @@ class _ForgetpasswordState extends State<Forgetpassword> {
                     }
                   },
                   child: Text('Reset Password')),
-              TextButton(
-                  onPressed: () {
+              GestureDetector(
+                  onTap: () {
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => Login()));
                   },

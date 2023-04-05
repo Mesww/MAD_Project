@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mutu/Page/Welcome.dart';
 import 'package:mutu/registerandlogin/register.dart';
@@ -8,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mutu/registerandlogin/profile.dart';
 import 'package:mutu/registerandlogin/forgetpassword.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -36,79 +36,164 @@ class _LoginState extends State<Login> {
             );
           }
           return Scaffold(
-            body: Center(
-              child: Form(
-                key: formkey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        onSaved: (String? email) => user.set_email(email!),
-                        validator: MultiValidator([
-                          EmailValidator(errorText: 'Email invalid syntax'),
-                          RequiredValidator(
-                              errorText: 'Plase enter email address')
-                        ]),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Email',
-                        )),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                        obscureText: true,
-                        onSaved: (String? password) =>
-                            user.set_password(password!),
-                        validator: RequiredValidator(
-                            errorText: 'Plase enter password '),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Password',
-                        )),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context) => Forgetpassword())));
-                        }, child: Text('Forget password?')),
-                    ElevatedButton(
-                        onPressed: () async {
-                          if (formkey.currentState!.validate()) {
-                            formkey.currentState!.save();
-                            try {
-                              await FirebaseAuth.instance
-                                  .signInWithEmailAndPassword(
-                                      email: user.get_email,
-                                      password: user.get_password)
-                                  .then((value) {
+            body: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Center(
+                child: Form(
+                  key: formkey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.shopping_cart_rounded,
+                        color: Color(0xFFFAD6A5),
+                        size: 80,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text('MUTU',
+                          style: Theme.of(context).textTheme.headlineLarge),
+                      Text('Welcome Back to MUTU, Easy 2 Sell && Easy 2 Buy ',
+                          style: Theme.of(context).textTheme.headlineSmall),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          onSaved: (String? email) => user.set_email(email!),
+                          validator: MultiValidator([
+                            EmailValidator(errorText: 'Email invalid syntax'),
+                            RequiredValidator(
+                                errorText: 'Please enter email address')
+                          ]),
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Color(0xFF7B8FA1),
+                              border: OutlineInputBorder(),
+                              labelText: 'Email',
+                              labelStyle:
+                                  Theme.of(context).textTheme.headlineSmall,
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFCFB997)),
+                                  borderRadius: BorderRadius.circular(10)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFCFB997)),
+                                  borderRadius: BorderRadius.circular(15)))),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                          obscureText: true,
+                          onSaved: (String? password) =>
+                              user.set_password(password!),
+                          validator: RequiredValidator(
+                              errorText: 'Please enter password '),
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Color(0xFF7B8FA1),
+                              border: OutlineInputBorder(),
+                              labelText: 'Password',
+                              labelStyle:
+                                  Theme.of(context).textTheme.headlineSmall,
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFCFB997)),
+                                  borderRadius: BorderRadius.circular(10)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFCFB997)),
+                                  borderRadius: BorderRadius.circular(15)))),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) => Forgetpassword())));
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                'Forget password?',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall!
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          )),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                          onTap: () async {
+                            if (formkey.currentState!.validate()) {
+                              formkey.currentState!.save();
+                              try {
+                                await FirebaseAuth.instance
+                                    .signInWithEmailAndPassword(
+                                        email: user.get_email,
+                                        password: user.get_password)
+                                    .then((value) {
+                                  Fluttertoast.showToast(
+                                      msg: 'Success',
+                                      gravity: ToastGravity.CENTER);
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Welcome()));
+                                });
+                              } on FirebaseAuthException catch (e) {
                                 Fluttertoast.showToast(
-                                    msg: 'Success',
+                                    msg: e.message!,
                                     gravity: ToastGravity.CENTER);
+                              }
+                            }
+                          },
+                          child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: Color(0xFFFAD6A5),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Center(
+                                  child: Text('Login',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall!
+                                          .copyWith(
+                                              fontSize: 15,
+                                              color: Color(0xFF344D67),
+                                              fontWeight: FontWeight.bold))))),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Not a member? ',
+                              style: Theme.of(context).textTheme.headlineSmall),
+                          GestureDetector(
+                              onTap: () {
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Welcome()));
-                              });
-                            } on FirebaseAuthException catch (e) {
-                              Fluttertoast.showToast(
-                                  msg: e.message!,
-                                  gravity: ToastGravity.CENTER);
-                            }
-                          }
-                        },
-                        child: Text('Login')),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Register()));
-                        },
-                        child: Text('register'))
-                  ],
+                                        builder: (context) => Register()));
+                              },
+                              child: Text('Register now',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall!
+                                      .copyWith(fontWeight: FontWeight.bold))),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

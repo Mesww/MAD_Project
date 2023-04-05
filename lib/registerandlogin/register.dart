@@ -71,7 +71,7 @@ class _RegisterState extends State<Register> {
                       height: 10,
                     ),
                     TextFormField(
-                      controller: confirmpass,
+                        controller: confirmpass,
                         validator: (String? value) {
                           if (value!.isEmpty) {
                             return 'Plase enter confirm password ';
@@ -118,8 +118,8 @@ class _RegisterState extends State<Register> {
                           }
                         },
                         child: Text('Ok')),
-                    TextButton(
-                        onPressed: () {
+                    GestureDetector(
+                        onTap: () {
                           Navigator.pushReplacement(context,
                               MaterialPageRoute(builder: (context) => Login()));
                         },
