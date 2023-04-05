@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "381482007479",
+    "project_id": "mutu-54548",
+    "storage_bucket": "mutu-54548.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381482007479:android:6052d634cfd31887cbc632",
+        "android_client_info": {
+          "package_name": "com.example.mutu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381482007479-k2la5dlb5hsgi0jh9nvqt2nn8v5nqrtc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBjI0mN1Y1Xr2ksRBWZQqKshOBBmsgEN4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381482007479-k2la5dlb5hsgi0jh9nvqt2nn8v5nqrtc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
