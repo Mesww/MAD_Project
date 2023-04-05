@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mutu/registerandlogin/profile.dart';
+import 'package:mutu/registerandlogin/forgetpassword.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -69,6 +70,10 @@ class _LoginState extends State<Login> {
                     SizedBox(
                       height: 10,
                     ),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context) => Forgetpassword())));
+                        }, child: Text('Forget password?')),
                     ElevatedButton(
                         onPressed: () async {
                           if (formkey.currentState!.validate()) {

@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +18,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final formkey = GlobalKey<FormState>();
+  TextEditingController confirmpass = TextEditingController();
   Profile user = Profile();
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
 
@@ -72,12 +71,16 @@ class _RegisterState extends State<Register> {
                       height: 10,
                     ),
                     TextFormField(
-                        onSaved: (String? confirm) =>
-                            user.set_confirm(confirm!),
-                        validator: MultiValidator([
-                          RequiredValidator(
-                              errorText: 'Plase enter confirm password ')
-                        ]),
+                      controller: confirmpass,
+                        validator: (String? value) {
+                          if (value!.isEmpty) {
+                            return 'Plase enter confirm password ';
+                          }
+                          if (confirmpass.text != user.get_password) {
+                            return 'Password not match';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Confirm password',
