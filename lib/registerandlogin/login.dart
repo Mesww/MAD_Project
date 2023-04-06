@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mutu/Page/Welcome.dart';
+import 'package:mutu/Pages/navigatorbar.dart';
+import 'package:mutu/Pages/welcome.dart';
 import 'package:mutu/registerandlogin/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mutu/registerandlogin/profile.dart';
 import 'package:mutu/registerandlogin/forgetpassword.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class _LoginState extends State<Login> {
   Profile user = Profile();
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   final formkey = GlobalKey<FormState>();
-  bool obscure_password = false;
+  bool obscure_password = true;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -147,7 +147,8 @@ class _LoginState extends State<Login> {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Welcome()));
+                                          builder: (context) =>
+                                              Navigatorbar()));
                                 });
                               } on FirebaseAuthException catch (e) {
                                 Fluttertoast.showToast(

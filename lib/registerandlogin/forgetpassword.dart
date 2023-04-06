@@ -23,13 +23,14 @@ class _ForgetpasswordState extends State<Forgetpassword> {
   Future passwordReset() async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: ip.text.trim());
-      showDialog(
-          context: context,
-          builder: ((context) {
-            return AlertDialog(
-              content: Text('Password reset link sent! Check your email'),
-            );
-          }));
+      
+      // showDialog(
+      //     context: context,
+      //     builder: ((context) {
+      //       return AlertDialog(
+      //         content: Text('Password reset link sent! Check your email'),
+      //       );
+      //     }));
     } on FirebaseAuthException catch (e) {
       print(e);
       Fluttertoast.showToast(

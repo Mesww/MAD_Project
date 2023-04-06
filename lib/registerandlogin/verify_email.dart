@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:mutu/Page/Welcome.dart';
+import 'package:mutu/Pages/navigatorbar.dart';
+import 'package:mutu/Pages/welcome.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class VerifyEmail extends StatefulWidget {
@@ -60,7 +61,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
     if (user.emailVerified) {
       timer.cancel();
       Navigator.pushReplacement(context as BuildContext,
-          MaterialPageRoute(builder: (context) => const Welcome()));
+          MaterialPageRoute(builder: (context) => const Navigatorbar()));
     }
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mutu/registerandlogin/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mutu/registerandlogin/register.dart';
-import 'package:mutu/Page/Welcome.dart';
+import 'package:mutu/Pages/welcome.dart';
 import 'package:mutu/registerandlogin/verify_email.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -39,6 +39,8 @@ Future<void> main(List<String> args) async {
                     fontWeight: FontWeight.normal,
                   ),
                 )),
+            iconTheme: IconThemeData(color: Color(0xFF344D67)),
+            
             inputDecorationTheme: InputDecorationTheme(
                 filled: true,
                 fillColor: Color(0xFF7B8FA1),
