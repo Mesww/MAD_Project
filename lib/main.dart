@@ -15,22 +15,39 @@ Future<void> main(List<String> args) async {
         debugShowCheckedModeBanner: false,
         home: Login(),
         theme: ThemeData(
-          scaffoldBackgroundColor: Color(0xFF567189),
-          textTheme: TextTheme(
-              headlineLarge: GoogleFonts.andika(
-                textStyle: TextStyle(
-                  color: Color(0xFFFAD6A5),
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold,
+            primaryColor: Color(0xFFFAD6A5),
+            scaffoldBackgroundColor: Color(0xFF567189),
+            textTheme: TextTheme(
+                headlineLarge: GoogleFonts.andika(
+                  textStyle: TextStyle(
+                    color: Color(0xFFFAD6A5),
+                    fontSize: 50,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              headlineSmall: GoogleFonts.andika(
-                textStyle: TextStyle(
-                  color: Color(0xFFFAD6A5),
-                  fontSize: 12,
-                  fontWeight: FontWeight.normal,
+                headlineMedium: GoogleFonts.andika(
+                  textStyle: TextStyle(
+                    color: Color(0xFFFAD6A5),
+                    fontSize: 25,
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
-              )),
-        )),
+                headlineSmall: GoogleFonts.andika(
+                  textStyle: TextStyle(
+                    color: Color(0xFFFAD6A5),
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal,
+                  ),
+                )),
+            inputDecorationTheme: InputDecorationTheme(
+                filled: true,
+                fillColor: Color(0xFF7B8FA1),
+                border: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFCFB997)),
+                    borderRadius: BorderRadius.circular(10)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFCFB997)),
+                    borderRadius: BorderRadius.circular(15))))),
   );
 }

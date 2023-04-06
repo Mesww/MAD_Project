@@ -27,6 +27,7 @@ class _WelcomeState extends State<Welcome> {
                     context, MaterialPageRoute(builder: (context) => Login())));
               },
               child: Text('Logout'))
+              
         ],
       )),
     );

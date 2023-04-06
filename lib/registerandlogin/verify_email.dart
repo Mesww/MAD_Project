@@ -18,16 +18,19 @@ class _VerifyEmailState extends State<VerifyEmail> {
   bool isEmailverified = false;
   late User user;
   late Timer timer;
+  bool resent = false;
   @override
   void initState() {
-    user = auth.currentUser!;
-    user.sendEmailVerification();
-    timer = Timer.periodic(Duration(seconds: 5), (timer) {
+    final user = auth.currentUser!;
+     user.sendEmailVerification();
+
+      timer = Timer.periodic(Duration(seconds: 5), (timer) {
       checkEmailVerified();
     });
     super.initState();
   }
 
+  
   @override
   void dispose() {
     timer.cancel();
@@ -38,8 +41,16 @@ class _VerifyEmailState extends State<VerifyEmail> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child:
-              Text('An email has been sent to ${user.email} please verfity')),
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'An email has been sent to your email please verfity',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          
+        ],
+      )),
     );
   }
 

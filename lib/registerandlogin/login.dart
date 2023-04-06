@@ -22,6 +22,7 @@ class _LoginState extends State<Login> {
   Profile user = Profile();
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   final formkey = GlobalKey<FormState>();
+  bool obscure_password = false;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -35,6 +36,7 @@ class _LoginState extends State<Login> {
               body: Center(child: Text("${snapshot.error}")),
             );
           }
+
           return Scaffold(
             body: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -67,45 +69,40 @@ class _LoginState extends State<Login> {
                             RequiredValidator(
                                 errorText: 'Please enter email address')
                           ]),
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Color(0xFF7B8FA1),
-                              border: OutlineInputBorder(),
-                              labelText: 'Email',
-                              labelStyle:
-                                  Theme.of(context).textTheme.headlineSmall,
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFCFB997)),
-                                  borderRadius: BorderRadius.circular(10)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFCFB997)),
-                                  borderRadius: BorderRadius.circular(15)))),
+                          decoration: InputDecoration(labelText: 'Email')
+                              .applyDefaults(Theme.of(context)
+                                  .inputDecorationTheme
+                                  .copyWith(
+                                      labelStyle: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall))),
                       SizedBox(
                         height: 10,
                       ),
                       TextFormField(
-                          obscureText: true,
+                          obscureText: obscure_password,
                           onSaved: (String? password) =>
                               user.set_password(password!),
                           validator: RequiredValidator(
                               errorText: 'Please enter password '),
                           decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Color(0xFF7B8FA1),
-                              border: OutlineInputBorder(),
-                              labelText: 'Password',
-                              labelStyle:
-                                  Theme.of(context).textTheme.headlineSmall,
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFCFB997)),
-                                  borderRadius: BorderRadius.circular(10)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFCFB997)),
-                                  borderRadius: BorderRadius.circular(15)))),
+                                  labelText: 'Password',
+                                  suffixIcon: IconButton(
+                                    icon: Icon(obscure_password
+                                        ? Icons.visibility
+                                        : Icons.visibility_off),
+                                    onPressed: () {
+                                      setState(() {
+                                        obscure_password = !obscure_password;
+                                      });
+                                    },
+                                  ))
+                              .applyDefaults(Theme.of(context)
+                                  .inputDecorationTheme
+                                  .copyWith(
+                                      labelStyle: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall))),
                       SizedBox(
                         height: 10,
                       ),
@@ -143,7 +140,10 @@ class _LoginState extends State<Login> {
                                     .then((value) {
                                   Fluttertoast.showToast(
                                       msg: 'Success',
-                                      gravity: ToastGravity.CENTER);
+                                      gravity: ToastGravity.CENTER,
+                                      backgroundColor: Color(0xFFFAD6A5),
+                                      textColor: Color(0xFF344D67));
+
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
@@ -152,7 +152,9 @@ class _LoginState extends State<Login> {
                               } on FirebaseAuthException catch (e) {
                                 Fluttertoast.showToast(
                                     msg: e.message!,
-                                    gravity: ToastGravity.CENTER);
+                                    gravity: ToastGravity.CENTER,
+                                    backgroundColor: Color(0xFFFAD6A5),
+                                    textColor: Color(0xFF344D67));
                               }
                             }
                           },
