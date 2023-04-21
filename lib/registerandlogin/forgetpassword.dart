@@ -23,7 +23,16 @@ class _ForgetpasswordState extends State<Forgetpassword> {
   Future passwordReset() async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: ip.text.trim());
-      
+
+      Fluttertoast.showToast(
+              msg: 'Password reset link sent! Check your email',
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Color(0xFFFAD6A5),
+              textColor: Color(0xFF344D67))
+          .then((value) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Login()));
+      });
       // showDialog(
       //     context: context,
       //     builder: ((context) {

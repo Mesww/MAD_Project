@@ -18,10 +18,12 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final formkey = GlobalKey<FormState>();
   TextEditingController confirmpass = TextEditingController();
+  TextEditingController password_con = TextEditingController();
   Profile user = Profile();
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   bool obscure_password = true;
   bool obscure_confirm = true;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -85,6 +87,7 @@ class _RegisterState extends State<Register> {
                         height: 10,
                       ),
                       TextFormField(
+                        controller: password_con,
                           obscureText: obscure_password,
                           onSaved: (String? password) =>
                               user.set_password(password!),
@@ -113,13 +116,14 @@ class _RegisterState extends State<Register> {
                       ),
                       TextFormField(
                           obscureText: obscure_confirm,
+                          controller: confirmpass,
                           onSaved: (String? confirm) =>
                               user.set_confirm(confirm!),
                           validator: (String? value) {
                             if (value!.isEmpty) {
                               return 'Plase enter confirm password ';
                             }
-                            if (user.get_confirm != user.get_password) {
+                            if (confirmpass.text != password_con.text ) {
                               return 'Password not match';
                             }
                             return null;
