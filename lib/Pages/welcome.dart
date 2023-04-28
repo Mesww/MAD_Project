@@ -126,7 +126,7 @@ class _WelcomeState extends State<Welcome> {
                                   width: 20,
                                 ),
                                 Text(
-                                  'Best Seller',
+                                  'Near your area',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium,

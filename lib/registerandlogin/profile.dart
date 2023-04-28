@@ -21,16 +21,11 @@ class Profile extends ChangeNotifier {
   Stream<String> get onAuthStateChanged =>
       _firebaseAuth.authStateChanges().map((User? user) => user!.uid);
 
-  Future<String> getCurrentID() async {
+  String getCurrentID() {
     return (_firebaseAuth.currentUser!).uid;
   }
 
   Future getCurrentUser() async {
     return (_firebaseAuth.currentUser);
   }
-
-
-  
-
 }
-
