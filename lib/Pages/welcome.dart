@@ -139,6 +139,7 @@ class _WelcomeState extends State<Welcome> {
                             CarouselSlider.builder(
                                 itemCount: images_bestseller.length,
                                 itemBuilder: ((context, index, realIndex) {
+                                  //pathbestseller
                                   final image_bestseller =
                                       images_bestseller[index];
                                   return buildImagesbestseller(
