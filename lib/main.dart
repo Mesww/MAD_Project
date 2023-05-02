@@ -18,7 +18,7 @@ Future<void> main(List<String> args) async {
       auth: Profile(),
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: HomeController(),
+          home: Login(),
           routes: <String, WidgetBuilder>{
             '/login': (context) => Login(),
             '/welcome': (context) => Navigator()

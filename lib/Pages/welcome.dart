@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:mutu/Pages/circle.dart';
+import 'package:mutu/Pages/detail.dart';
 import 'package:mutu/Pages/square.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -139,12 +140,28 @@ class _WelcomeState extends State<Welcome> {
                             CarouselSlider.builder(
                                 itemCount: images_bestseller.length,
                                 itemBuilder: ((context, index, realIndex) {
-                                  //pathbestseller
                                   final image_bestseller =
                                       images_bestseller[index];
-                                  return buildImagesbestseller(
-                                      image_bestseller, index);
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => Detail(),
+                                          ));
+                                    },
+                                    child: buildImagesbestseller(
+                                        image_bestseller, index),
+                                  );
                                 }),
+                                // CarouselSlider.builder(
+                                //     itemCount: images_bestseller.length,
+                                //     itemBuilder: ((context, index, realIndex) {
+                                //       final image_bestseller =
+                                //           images_bestseller[index];
+                                //       return buildImagesbestseller(
+                                //           image_bestseller, index);
+                                //     }),
                                 options: CarouselOptions(
                                   // viewportFraction: 1,
                                   height: 200,
@@ -198,8 +215,19 @@ class _WelcomeState extends State<Welcome> {
                                 itemBuilder: ((context, index, realIndex) {
                                   final image_recommend =
                                       images_recommend[index];
-                                  return buildImagesreccommand(
-                                      image_recommend, index);
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => Detail(),
+                                          ));
+                                    },
+                                    child: buildImagesreccommand(
+                                        image_recommend, index),
+                                  );
+                                  // return buildImagesreccommand(
+                                  //     image_recommend, index);
                                 }),
                                 options: CarouselOptions(
                                   // viewportFraction: 1,

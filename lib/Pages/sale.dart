@@ -260,10 +260,8 @@ class _SaleState extends State<Sale> {
                         uploadFile();
                         formkey.currentState!.reset();
                         setState(() {
-                          selectimagepath = null;
                           select_item_cat = null;
                           select_item_status = null;
-                          
                         });
                       }
                     },
