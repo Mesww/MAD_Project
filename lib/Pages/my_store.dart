@@ -1,10 +1,10 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:mutu/Pages/navigatorbar.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mutu/main.dart';
+import 'package:mutu/provider/profile.dart';
+import 'package:provider/provider.dart';
 
 class MyStore extends StatefulWidget {
   const MyStore({Key? key}) : super(key: key);
@@ -43,7 +43,7 @@ class _MyStoreState extends State<MyStore> {
           stream: FirebaseFirestore.instance
               .collection('products')
               .where('userid',
-                  isEqualTo: Provider.of(context).auth!.getCurrentID())
+                  isEqualTo: context.watch<Profile>().getCurrentID())
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) {

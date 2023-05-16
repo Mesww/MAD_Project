@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mutu/Pages/circle.dart';
-import 'package:mutu/widgets/Chat.dart';
+import 'package:mutu/provider/Chat.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Chat extends StatefulWidget {

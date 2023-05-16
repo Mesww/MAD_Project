@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mutu/Pages/navigatorbar.dart';
-import 'package:mutu/registerandlogin/profile.dart';
-
-import '../main.dart';
+import 'package:mutu/provider/profile.dart';
+import 'package:provider/provider.dart';
 
 class Personnalinfo extends StatefulWidget {
   const Personnalinfo({Key? key}) : super(key: key);
@@ -15,7 +14,7 @@ class _PersonnalinfoState extends State<Personnalinfo> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Provider.of(context).auth?.getCurrentUser(),
+      future: context.watch<Profile>().getCurrentUser(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(

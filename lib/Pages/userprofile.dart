@@ -5,7 +5,7 @@ import 'package:mutu/Pages/address.dart';
 import 'package:mutu/Pages/my_store.dart';
 import 'package:mutu/Pages/payment/favorite.dart';
 import 'package:mutu/Pages/setting.dart';
-import 'package:mutu/registerandlogin/login.dart';
+import 'package:mutu/Pages/registerandlogin/login.dart';
 import 'package:mutu/Pages/personnalinfo.dart';
 import 'package:mutu/Pages/payment/add_wallet.dart';
 

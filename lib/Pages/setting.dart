@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mutu/Pages/contact.dart';
 import 'package:mutu/Pages/navigatorbar.dart';
 import 'package:mutu/Pages/userprofile.dart';
-import 'package:mutu/registerandlogin/login.dart';
+import 'package:mutu/Pages/registerandlogin/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mutu/registerandlogin/profile.dart';
+import 'package:mutu/provider/profile.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);

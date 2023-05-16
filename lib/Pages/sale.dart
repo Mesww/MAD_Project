@@ -4,10 +4,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:io';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:mutu/forms/saleform.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../main.dart';
+import 'package:mutu/provider/forms/saleform.dart';
+import 'package:mutu/provider/profile.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class Sale extends StatefulWidget {
@@ -103,7 +104,7 @@ class _SaleState extends State<Sale> {
                     validator: RequiredValidator(
                         errorText: 'Please input name of your product'),
                     onSaved: (String? name) {
-                      formsale.setName(name!);
+                      formsale.set_name(name!);
                     },
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -117,7 +118,7 @@ class _SaleState extends State<Sale> {
                     validator: RequiredValidator(
                         errorText: 'Please input detail of your product'),
                     onSaved: (String? detail) {
-                      formsale.setdetail(detail!);
+                      formsale.set_detail(detail!);
                     },
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -151,7 +152,7 @@ class _SaleState extends State<Sale> {
                         select_item_cat = item!;
                       }),
                       onSaved: (String? category) {
-                        formsale.setcategory(category!);
+                        formsale.set_category(category!);
                       },
                     ),
                   ),
@@ -166,7 +167,7 @@ class _SaleState extends State<Sale> {
                           errorText: 'Only numberic')
                     ]),
                     onSaved: (String? price) {
-                      formsale.setprice(int.tryParse(price!)!);
+                      formsale.set_price(int.tryParse(price!)!);
                     },
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -180,7 +181,7 @@ class _SaleState extends State<Sale> {
                     validator: RequiredValidator(
                         errorText: 'Please input brand of your product'),
                     onSaved: (String? brand) {
-                      formsale.setbrand(brand!);
+                      formsale.set_brand(brand!);
                     },
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -194,7 +195,7 @@ class _SaleState extends State<Sale> {
                     validator: RequiredValidator(
                         errorText: 'Please input color of your product'),
                     onSaved: (String? color) {
-                      formsale.setcolor(color!);
+                      formsale.set_color(color!);
                     },
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -228,7 +229,7 @@ class _SaleState extends State<Sale> {
                         select_item_status = item!;
                       }),
                       onSaved: (String? durability) {
-                        formsale.setdurability(durability!);
+                        formsale.set_durability(durability!);
                       },
                     ),
                   ),
@@ -260,10 +261,8 @@ class _SaleState extends State<Sale> {
                         uploadFile();
                         formkey.currentState!.reset();
                         setState(() {
-                          selectimagepath = null;
                           select_item_cat = null;
                           select_item_status = null;
-                          
                         });
                       }
                     },
@@ -417,7 +416,7 @@ class _SaleState extends State<Sale> {
         'brand': formsale.getbrand,
         'color': formsale.getcolor,
         'durability': formsale.getdurability,
-        'userid': Provider.of(context).auth?.getCurrentID(),
+        'userid': context.read<Profile>().getCurrentID(),
         'url': value
       });
     });
