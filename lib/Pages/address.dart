@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mutu/Pages/editaddress.dart';
 import 'package:mutu/Pages/navigatorbar.dart';
 
 class Address extends StatefulWidget {
@@ -59,7 +60,12 @@ class _AddressState extends State<Address> {
                   child: Align(
                       alignment: Alignment.topLeft,
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => editAddress())));
+                        },
                         child: Container(
                           height: 40,
                           width: 150,

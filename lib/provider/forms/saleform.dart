@@ -4,7 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Saleform extends ChangeNotifier {
-  
+  List<String> items_cat = [
+    'Clothes',
+    'Furniture',
+    'Electronic',
+    'Watch',
+    'Book',
+    'Skirt',
+    'Shoes',
+    'Bag',
+    'Accessories',
+    'Musical',
+    'Other'
+  ];
+
+  List<String> items_status = ['very good', 'good', 'bad', 'fair'];
   String name = '';
   String detail = '';
   String category = '';
@@ -14,6 +28,16 @@ class Saleform extends ChangeNotifier {
   String durability = '';
   String urldownload = '';
 
+  void add_items_cat(String items_cat) {
+    this.items_cat.add(items_cat);
+  }
+
+  void add_items_status(String items_status) {
+    this.items_status.add(items_status);
+  }
+
+  List<String> get getitems_cat => items_cat;
+  List<String> get getitems_status => items_status;
   String get getname => name;
   String get getdetail => detail;
   String get getcategory => category;
@@ -23,7 +47,6 @@ class Saleform extends ChangeNotifier {
   String get getdurability => durability;
   String get geturldownload => urldownload;
 
-  
   void set_name(String name) {
     this.name = name;
     notifyListeners();

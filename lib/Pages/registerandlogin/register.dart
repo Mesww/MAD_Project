@@ -6,6 +6,7 @@ import 'package:mutu/provider/profile.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mutu/Pages/registerandlogin/verify_email.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -86,7 +87,7 @@ class _RegisterState extends State<Register> {
                         height: 10,
                       ),
                       TextFormField(
-                        controller: password_con,
+                          controller: password_con,
                           obscureText: obscure_password,
                           onSaved: (String? password) =>
                               user.set_password(password!),
@@ -122,7 +123,7 @@ class _RegisterState extends State<Register> {
                             if (value!.isEmpty) {
                               return 'Plase enter confirm password ';
                             }
-                            if (confirmpass.text != password_con.text ) {
+                            if (confirmpass.text != password_con.text) {
                               return 'Password not match';
                             }
                             return null;
@@ -157,18 +158,27 @@ class _RegisterState extends State<Register> {
                                 await FirebaseAuth.instance
                                     .createUserWithEmailAndPassword(
                                         email: user.get_email,
-                                        password: user.get_password);
-                                Fluttertoast.showToast(
-                                        msg: 'Success',
-                                        gravity: ToastGravity.CENTER,
-                                        backgroundColor: Color(0xFFFAD6A5),
-                                        textColor: Color(0xFF344D67))
+                                        password: user.get_password)
                                     .then((value) {
-                                  formkey.currentState?.reset();
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => VerifyEmail()));
+                                  FirebaseFirestore.instance
+                                      .collection('user')
+                                      .add({
+                                    'email': value.user?.email,
+                                    'uid': value.user?.uid
+                                  });
+                                  Fluttertoast.showToast(
+                                          msg: 'Success',
+                                          gravity: ToastGravity.CENTER,
+                                          backgroundColor: Color(0xFFFAD6A5),
+                                          textColor: Color(0xFF344D67))
+                                      .then((value) {
+                                    formkey.currentState?.reset();
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                VerifyEmail()));
+                                  });
                                 });
                               } on FirebaseAuthException catch (e) {
                                 // print(e.code);

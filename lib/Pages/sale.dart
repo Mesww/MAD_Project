@@ -24,8 +24,6 @@ class _SaleState extends State<Sale> {
 
   var images;
   File? selectimagepath;
-  List<String> items_cat = ['Clothes', 'Furniture', 'Electronic', 'Watch'];
-  List<String> items_status = ['very good', 'good', 'bad', 'fair'];
   var select_item_cat = null;
   var select_item_status = null;
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
@@ -140,7 +138,7 @@ class _SaleState extends State<Sale> {
                       ),
                       dropdownColor: Color(0xFF7B8FA1),
                       value: select_item_cat,
-                      items: items_cat
+                      items: context.read<Saleform>().getitems_cat
                           .map((item) => DropdownMenuItem(
                               value: item,
                               child: Text(item,
@@ -217,7 +215,7 @@ class _SaleState extends State<Sale> {
                       ),
                       dropdownColor: Color(0xFF7B8FA1),
                       value: select_item_status,
-                      items: items_status
+                      items: context.read<Saleform>().getitems_status
                           .map((item) => DropdownMenuItem(
                               value: item,
                               child: Text(item,

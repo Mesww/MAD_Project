@@ -24,7 +24,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
   void initState() {
     final user = auth.currentUser!;
      user.sendEmailVerification();
-
       timer = Timer.periodic(Duration(seconds: 5), (timer) {
       checkEmailVerified();
     });

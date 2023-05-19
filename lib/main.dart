@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mutu/Pages/registerandlogin/login.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:mutu/Pages/registerandlogin/widget_tree.dart';
 import 'package:mutu/provider/forms/saleform.dart';
-import 'package:mutu/provider/imagewelcome.dart';
 import 'package:mutu/provider/profile.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mutu/provider/welcomeprovider.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main(List<String> args) async {
@@ -15,15 +15,19 @@ Future<void> main(List<String> args) async {
     MultiProvider(
       providers: [
         Provider(create: ((context) => Profile())),
-        Provider(create: ((context) => Imagewelcome())),
         Provider(create: ((context) => Saleform())),
+        Provider(create: ((context) => Welcomeprovider())),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: Login(),
+          home: WidgetTree(),
           theme: ThemeData(
               primaryColorDark: Color(0xFF7B8FA1),
-              cardTheme: CardTheme(color: Color(0xFF344D67)),
+              cardTheme: CardTheme(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  shadowColor: Color(0xFF344D67),
+                  color: Color(0xFFFAD6A5)),
               appBarTheme: AppBarTheme(backgroundColor: Color(0xFF344D67)),
               primaryColor: Color(0xFFFAD6A5),
               scaffoldBackgroundColor: Color(0xFF567189),

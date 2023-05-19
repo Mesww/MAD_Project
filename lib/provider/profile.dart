@@ -7,14 +7,23 @@ class Profile extends ChangeNotifier {
   String password = '';
   String email = '';
   String confirm = '';
+  String name = '';
+  int age = 0;
+  String about = '';
 
   void set_password(String password) => this.password = password;
+  void set_name(String name) => this.name = name;
+  void set_about(String about) => this.about = about;
+  void set_age(int age) => this.age = age;
   void set_email(String email) => this.email = email;
   void set_confirm(String confirm) => this.confirm = confirm;
 
   String get get_password => password;
   String get get_email => email;
   String get get_confirm => confirm;
+  String get get_name => name;
+  String get get_about => about;
+  int get get_age => age;
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
