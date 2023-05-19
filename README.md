@@ -1,4 +1,4 @@
-# mutu
+# flutter_application_mutu
 
 A new Flutter project.
 

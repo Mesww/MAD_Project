@@ -1,4 +1,4 @@
-package com.example.mutu
+package com.example.flutter_application_mutu
 
 import io.flutter.embedding.android.FlutterActivity
 
