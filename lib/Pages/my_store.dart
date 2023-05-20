@@ -1,8 +1,10 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:mutu/Pages/data_store.dart';
 import 'package:mutu/Pages/navigatorbar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mutu/provider/productprovider.dart';
 import 'package:mutu/provider/profile.dart';
 import 'package:provider/provider.dart';
 
@@ -51,11 +53,18 @@ class _MyStoreState extends State<MyStore> {
             } else {
               return ListView(
                 children: snapshot.data!.docs.map<Widget>((doc) {
+                  final String docid = doc.id;
                   return Padding(
                     padding:
                         const EdgeInsets.only(left: 80, right: 80, top: 20),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<Productprovider>().setselctproduct(docid);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DataInImage()));
+                      },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).primaryColor,
                           padding: const EdgeInsets.symmetric(

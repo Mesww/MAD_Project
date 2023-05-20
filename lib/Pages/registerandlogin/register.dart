@@ -161,8 +161,11 @@ class _RegisterState extends State<Register> {
                                         password: user.get_password)
                                     .then((value) {
                                   FirebaseFirestore.instance
-                                      .collection('user')
-                                      .add({
+                                      .collection('user').doc(value.user?.uid)
+                                      .set({
+                                    'name' : 'Anonymus',
+                                    'age' : '',
+                                    'about': '',
                                     'email': value.user?.email,
                                     'uid': value.user?.uid
                                   });

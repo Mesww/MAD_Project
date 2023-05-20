@@ -233,6 +233,12 @@ class _DataInImageState extends State<DataInImage> {
                                   debugPrint('unlike');
                                 },
                               );
+                              context.read<Productprovider>().setcoloricon(
+                                  Color.fromARGB(226, 123, 143, 161));
+                              setState(() {
+                                checkfav = false;
+                                debugPrint('$checkfav');
+                              });
                             } else {
                               fav
                                   .doc(context
@@ -251,7 +257,13 @@ class _DataInImageState extends State<DataInImage> {
                                     .collection('data')
                                     .add(alldata);
                               });
-
+                              context
+                                  .read<Productprovider>()
+                                  .setcoloricon(Theme.of(context).primaryColor);
+                              setState(() {
+                                checkfav = true;
+                                debugPrint('$checkfav');
+                              });
                               debugPrint('like');
                             }
                           }
@@ -713,12 +725,12 @@ class _ProductSlideBoxState extends State<ProductSlideBox> {
                       // Share icon
                       IconButton(
                         onPressed: _onShareClick,
-                        icon: const Icon(Icons.ios_share_outlined),
+                        icon: Icon(Icons.ios_share_outlined, size: 19),
                       ),
 
                       // Favorite Icon
                       ElevatedButton.icon(
-                        icon: const Icon(Icons.favorite_outlined, size: 19.0),
+                        icon: context.read<Productprovider>().geticon,
                         label: const Text("Favorite"),
                         onPressed: _onfavoriteClick,
                         style: ElevatedButton.styleFrom(

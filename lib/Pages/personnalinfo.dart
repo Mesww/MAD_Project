@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mutu/Pages/navigatorbar.dart';
 import 'package:mutu/provider/profile.dart';
@@ -12,22 +14,77 @@ class Personnalinfo extends StatefulWidget {
 
 class _PersonnalinfoState extends State<Personnalinfo> {
   final formkey = GlobalKey<FormState>();
+  Profile user = Profile();
+  Map alldata = {};
+  String name = '';
+  String email = '';
+  String age = '';
+  String about = '';
+  String uid = '';
+
+  Future updateData(String key, String newText) async {
+    final documentReference = FirebaseFirestore.instance
+        .collection('user')
+        .doc(context.read<Profile>().getCurrentID());
+
+    documentReference.update({
+      key: newText,
+    });
+  }
+
+  Future<void> _getdata(BuildContext context) async {
+    final productProvider = context.read<Profile>();
+    final snapshot = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(productProvider.getCurrentID())
+        .get();
+    if (snapshot.exists) {
+      setState(() {
+        debugPrint('${snapshot.data()}');
+        alldata = snapshot.data()!;
+        name = snapshot.data()!['name'];
+        email = snapshot.data()!['email'];
+        age = snapshot.data()!['age'];
+        about = snapshot.data()!['about'];
+        uid = snapshot.data()!['uid'];
+        debugPrint(name);
+      });
+    }
+  }
+
+  List<String> data = [];
+  List title = ['name', 'email', 'age', 'about'];
+  TextEditingController name_ = TextEditingController();
+  TextEditingController email_ = TextEditingController();
+  TextEditingController age_ = TextEditingController();
+  TextEditingController about_ = TextEditingController();
+  List<TextEditingController> controller = [];
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getdata(context);
+      data.addAll([name, email, age, about]);
+      controller.addAll([name_, email_, age_, about_]);
+    });
+  }
+
+  void clear(int index) {
+    controller[index].clear();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: context.watch<Profile>().getCurrentUser(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          
-          return Scaffold(
-              body: SingleChildScrollView(
-                  child: Form(
-                    key: formkey,
-                    child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Stack(children: [
-                                  Stack(alignment: Alignment.bottomCenter, children: <Widget>[
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Stack(
+              children: [
+                Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: <Widget>[
                     Container(
                       color: Theme.of(context).primaryColor,
                       margin: EdgeInsets.only(bottom: 40),
@@ -47,148 +104,141 @@ class _PersonnalinfoState extends State<Personnalinfo> {
                       radius: 40,
                       backgroundColor: Theme.of(context).primaryColor,
                     ),
-                                  ]),
-                                  IconButton(
+                  ],
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: ((context) => Navigatorbar())),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Card(
+                    child: SizedBox(
+                      height: 40,
+                      width: 100,
+                      child: Text(
+                        'Edit',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(
+                              color:
+                                  Theme.of(context).appBarTheme.backgroundColor,
+                            ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 8,
+            child: ListView.builder(
+              itemCount: title.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(
+                      '${title[index]} : ${data[index]}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall!
+                          .copyWith(
+                              color: Theme.of(context)
+                                  .appBarTheme
+                                  .backgroundColor),
+                    ),
+                    trailing: IconButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => Navigatorbar())));
-                      },
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                      )),
-                                ]),
-                                Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Center(
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Container(
-                                alignment: Alignment.center,
-                                color: Theme.of(context).primaryColor,
-                                width: 100,
-                                height: 50,
-                                child: Text(
-                                  'Edit',
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                backgroundColor: Theme.of(context)
+                                    .appBarTheme
+                                    .backgroundColor,
+                                title: Text(
+                                  '${title[index]}'.toUpperCase(),
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium!
-                                      .copyWith(
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor),
+                                      .copyWith(fontWeight: FontWeight.bold),
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                            readOnly: true,
-                            enabled: false,
-                            keyboardType: TextInputType.none,
-                            decoration: InputDecoration(
-                                    labelText: '${snapshot.data.email}')
-                                .applyDefaults(Theme.of(context)
-                                    .inputDecorationTheme
-                                    .copyWith(
-                                        labelStyle: Theme.of(context)
+                                content: TextFormField(
+                                  controller: controller[index],
+                                ),
+                                actions: <Widget>[
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red),
+                                    child: Text('CANCEL',
+                                        style: Theme.of(context)
                                             .textTheme
-                                            .headlineSmall))),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                            readOnly: true,
-                            enabled: false,
-                            keyboardType: TextInputType.none,
-                            decoration: InputDecoration(labelText: '*******')
-                                .applyDefaults(Theme.of(context)
-                                    .inputDecorationTheme
-                                    .copyWith(
-                                        labelStyle: Theme.of(context)
-                                            .textTheme
-                                            .headlineSmall))),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          onSaved: (value)=>Profile().set_name(value!),
-                            decoration: InputDecoration(labelText: 'Name')
-                                .applyDefaults(Theme.of(context)
-                                    .inputDecorationTheme
-                                    .copyWith(
-                                        labelStyle: Theme.of(context)
-                                            .textTheme
-                                            .headlineSmall))),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          onSaved: (newValue) => Profile().set_about(newValue!),
-                          decoration: InputDecoration(
-                            labelText: 'About',
-                          ).applyDefaults(Theme.of(context)
-                              .inputDecorationTheme
-                              .copyWith(
-                                  labelStyle:
-                                      Theme.of(context).textTheme.headlineSmall)),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          onSaved: (newValue) => Profile().set_age(int.parse(newValue!)),
-                          decoration: InputDecoration(
-                            labelText: 'Age',
-                          ).applyDefaults(Theme.of(context)
-                              .inputDecorationTheme
-                              .copyWith(
-                                  labelStyle:
-                                      Theme.of(context).textTheme.headlineSmall)),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            height: 40,
-                            width: 150,
-                            padding: EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Center(
-                                child: Text(
-                              'Ok',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall!
-                                  .copyWith(
-                                      color: Color(0xFF344D67), fontSize: 15),
-                            )),
-                          ),
-                        ),
-                      ],
-                    ),
+                                            .headlineSmall!
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .appBarTheme
+                                                    .backgroundColor,
+                                                fontWeight: FontWeight.bold)),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
                                   ),
-                                )
-                              ],
-                            ),
-                  )));
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            Theme.of(context).primaryColor),
+                                    child: Text('OK',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineSmall!
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .appBarTheme
+                                                    .backgroundColor,
+                                                fontWeight: FontWeight.bold)),
+                                    onPressed: () async {
+                                      await updateData('${title[index]}',
+                                          controller[index].text);
+                                      clear(index);
+                                      // do something with the text
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              );
+                            });
+                      },
+                      icon: Icon(
+                        Icons.arrow_forward,
+                        color: Theme.of(context).appBarTheme.backgroundColor,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
