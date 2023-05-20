@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,6 +9,8 @@ import 'package:mutu/Pages/setting.dart';
 import 'package:mutu/Pages/registerandlogin/login.dart';
 import 'package:mutu/Pages/personnalinfo.dart';
 import 'package:mutu/Pages/payment/add_wallet.dart';
+import 'package:mutu/provider/profile.dart';
+import 'package:provider/provider.dart';
 
 class Userprofile extends StatefulWidget {
   const Userprofile({Key? key}) : super(key: key);
@@ -24,27 +27,39 @@ class _UserprofileState extends State<Userprofile> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(alignment: Alignment.bottomCenter, children: <Widget>[
-              Container(
-                color: Theme.of(context).primaryColor,
-                margin: EdgeInsets.only(bottom: 40),
-                height: 150,
-                width: double.infinity,
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Image.network(
-                    'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148907303.jpg?w=740&t=st=1681908736~exp=1681909336~hmac=5fdb1fbeecaf7427a7f2272c512478f9f439189687c9c4bfd9b1a9b2f9f6a2fc',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://icons.iconarchive.com/icons/iconarchive/cute-animal/256/Cute-Cat-icon.png'),
-                radius: 40,
-                backgroundColor: Theme.of(context).primaryColor,
-              ),
-            ]),
+            StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('user')
+                    .doc(context.read<Profile>().getCurrentID())
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data != null) {
+                    final data = snapshot.data!.data() as Map;
+                    return Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: <Widget>[
+                          Container(
+                            color: Theme.of(context).primaryColor,
+                            margin: EdgeInsets.only(bottom: 40),
+                            height: 150,
+                            width: double.infinity,
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: Image.network(
+                                data['urlbackground'],
+                                fit: BoxFit.cover,
+                              ),  
+                            ),
+                          ),
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(data['urlprofile']),
+                            radius: 40,
+                            backgroundColor: Theme.of(context).primaryColor,
+                          ),
+                        ]);
+                  }
+                  return CircularProgressIndicator();
+                }),
             Center(
                 child: Padding(
               padding: const EdgeInsets.only(left: 40, right: 40, top: 20),

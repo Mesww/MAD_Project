@@ -417,7 +417,8 @@ class _SaleState extends State<Sale> {
         'color': formsale.getcolor,
         'durability': formsale.getdurability,
         'userid': context.read<Profile>().getCurrentID(),
-        'url': value
+        'url': value,
+        'stage':false
       });
     });
     // print(urlDownloads);

@@ -23,7 +23,7 @@ class _DataInImageState extends State<DataInImage> {
   String brand = '';
   String color = '';
   String durability = '';
-  String userid = '';
+  String? userid = '';
   String url = '';
   String price = '';
   bool checkfav = false;
@@ -34,37 +34,42 @@ class _DataInImageState extends State<DataInImage> {
       FirebaseFirestore.instance.collection('products');
   Future<void> _getdata(BuildContext context) async {
     final productProvider = context.read<Productprovider>();
-    debugPrint(productProvider.getselectproduct);
-    final snapshot = await FirebaseFirestore.instance
-        .collection('products')
-        .doc(productProvider.getselectproduct)
-        .get();
+    final selectedProduct = productProvider.getselectproduct;
+    if (selectedProduct.isNotEmpty && selectedProduct.isNotEmpty) {
+      debugPrint(productProvider.getselectproduct);
 
-    if (snapshot.exists) {
-      setState(() {
-        debugPrint('${snapshot.data()}');
-        alldata = snapshot.data()!;
-        name = snapshot.data()!['name'];
-        detail = snapshot.data()!['detail'];
-        category = snapshot.data()!['category'];
-        userid = snapshot.data()!['userid'];
-        url = snapshot.data()!['url'];
-        price = snapshot.data()!['price'];
-        debugPrint('${name} ${detail} ${category} ${userid} ${url} ${price} ');
-        context.read<Productprovider>().setlabel(Text("$price ฿",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: Color.fromARGB(225, 38, 71, 100),
-            )));
-        details.clear();
-        details = {
-          "Brand": "${snapshot.data()!['brand']}",
-          "Status": "${snapshot.data()!['durability']}",
-          "Color": "${snapshot.data()!['color']}",
-        };
-        images.add(url);
-      });
+      final snapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .doc(productProvider.getselectproduct)
+          .get();
+
+      if (snapshot.exists) {
+        setState(() {
+          debugPrint('${snapshot.data()}');
+          alldata = snapshot.data()!;
+          name = snapshot.data()!['name'];
+          detail = snapshot.data()!['detail'];
+          category = snapshot.data()!['category'];
+          userid = snapshot.data()!['userid'];
+          url = snapshot.data()!['url'];
+          price = snapshot.data()!['price'];
+          debugPrint(
+              '${name} ${detail} ${category} ${userid} ${url} ${price} ');
+          context.read<Productprovider>().setlabel(Text("$price ฿",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: Color.fromARGB(225, 38, 71, 100),
+              )));
+          details.clear();
+          details = {
+            "Brand": "${snapshot.data()!['brand']}",
+            "Status": "${snapshot.data()!['durability']}",
+            "Color": "${snapshot.data()!['color']}",
+          };
+          images.add(url);
+        });
+      }
     }
   }
 
@@ -89,6 +94,7 @@ class _DataInImageState extends State<DataInImage> {
 
   @override
   Widget build(BuildContext context) {
+    final selectproduct = context.read<Productprovider>().getselectproduct;
     final primaryColor = Theme.of(context).primaryColor;
     const secondaryColor = Color.fromARGB(226, 123, 143, 161);
     final String prices = price;
@@ -170,27 +176,39 @@ class _DataInImageState extends State<DataInImage> {
             child: Column(
               children: [
                 // User profile banner
-                const ShopBanner(
-                  avatarImage: NetworkImage(
-                    'https://m.media-amazon.com/images/I/71gCYaV0PUL._AC_UX679_.jpg',
-                  ),
-                  title: Text(
-                    'Profile of USER',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFCFB997),
-                    ),
-                  ),
-                  subtitle: Text(
-                    '** SCORE **',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFFCFB997),
-                    ),
-                  ),
-                ),
+                StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('user')
+                        .doc(userid!)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && snapshot.data != null) {
+                        final data = snapshot.data!.data() as Map;
+
+                        return ShopBanner(
+                          avatarImage: NetworkImage(
+                            data['urlprofile']!,
+                          ),
+                          title: Text(
+                            'Profile of ${data['name']!}',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFCFB997),
+                            ),
+                          ),
+                          subtitle: Text(
+                            '** SCORE **',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                              color: Color(0xFFCFB997),
+                            ),
+                          ),
+                        );
+                      }
+                      return CircularProgressIndicator();
+                    }),
 
                 const SizedBox(
                   height: 8,
@@ -201,9 +219,7 @@ class _DataInImageState extends State<DataInImage> {
                     stream: FirebaseFirestore.instance
                         .collection('fav')
                         .where('idproduct',
-                            isEqualTo: context
-                                .read<Productprovider>()
-                                .getselectproduct)
+                            isEqualTo: selectproduct)
                         .snapshots(),
                     builder: (context, snapshot) {
                       return ProductSlideBox(
@@ -338,7 +354,7 @@ class _DataInImageState extends State<DataInImage> {
                                 itemBuilder: (context, index) {
                                   final data = snapshot.data!.docs[index].data()
                                       as Map<String, dynamic>;
-                                  final image = data['url'];
+                                  final image = data['url']!;
 
                                   return context
                                               .read<Productprovider>()
@@ -347,14 +363,27 @@ class _DataInImageState extends State<DataInImage> {
                                       ? Padding(
                                           padding: const EdgeInsets.only(
                                               left: 8, right: 8, top: 1),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            child: AspectRatio(
-                                              aspectRatio: 1,
-                                              child: Image.network(
-                                                image,
-                                                fit: BoxFit.cover,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              context
+                                                  .read<Productprovider>()
+                                                  .setselctproduct(snapshot
+                                                      .data!.docs[index].id);
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DataInImage()));
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              child: AspectRatio(
+                                                aspectRatio: 1,
+                                                child: Image.network(
+                                                  image,
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
                                           ),

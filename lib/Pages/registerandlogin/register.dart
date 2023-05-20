@@ -161,13 +161,18 @@ class _RegisterState extends State<Register> {
                                         password: user.get_password)
                                     .then((value) {
                                   FirebaseFirestore.instance
-                                      .collection('user').doc(value.user?.uid)
+                                      .collection('user')
+                                      .doc(value.user?.uid)
                                       .set({
-                                    'name' : 'Anonymus',
-                                    'age' : '',
+                                    'name': 'Anonymus',
+                                    'age': '',
                                     'about': '',
                                     'email': value.user?.email,
-                                    'uid': value.user?.uid
+                                    'uid': value.user?.uid,
+                                    'urlbackground':
+                                        'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148907303.jpg?w=740&t=st=1681908736~exp=1681909336~hmac=5fdb1fbeecaf7427a7f2272c512478f9f439189687c9c4bfd9b1a9b2f9f6a2fc',
+                                    'urlprofile':
+                                        'https://icons.iconarchive.com/icons/iconarchive/cute-animal/256/Cute-Cat-icon.png'
                                   });
                                   Fluttertoast.showToast(
                                           msg: 'Success',
