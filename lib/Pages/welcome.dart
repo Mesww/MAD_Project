@@ -3,8 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mutu/Pages/circle.dart';
+import 'package:mutu/Pages/data_store.dart';
 import 'package:mutu/Pages/search.dart';
 import 'package:mutu/provider/forms/saleform.dart';
+import 'package:mutu/provider/productprovider.dart';
 import 'package:mutu/provider/welcomeprovider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:provider/provider.dart';
@@ -145,9 +147,19 @@ class _WelcomeState extends State<Welcome> {
                                       itemBuilder: (context, index) {
                                         var data = snapshot.data!.docs[index]
                                             .data() as Map<String, dynamic>;
-
+                                        var docid =
+                                            snapshot.data!.docs[index].id;
                                         return GestureDetector(
-                                          onTap: () {},
+                                          onTap: () {
+                                            context
+                                                .read<Productprovider>()
+                                                .setselctproduct(docid);
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DataInImage()));
+                                          },
                                           child: SizedBox(
                                             height: 100,
                                             child: Card(
@@ -230,9 +242,19 @@ class _WelcomeState extends State<Welcome> {
                                       itemBuilder: (context, index) {
                                         var data = snapshot.data!.docs[index]
                                             .data() as Map<String, dynamic>;
-
+                                        var docid =
+                                            snapshot.data!.docs[index].id;
                                         return GestureDetector(
-                                          onTap: () {},
+                                          onTap: () {
+                                            context
+                                                .read<Productprovider>()
+                                                .setselctproduct(docid);
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DataInImage()));
+                                          },
                                           child: SizedBox(
                                             height: 100,
                                             child: Card(

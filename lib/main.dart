@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mutu/Pages/registerandlogin/widget_tree.dart';
 import 'package:mutu/provider/forms/saleform.dart';
+import 'package:mutu/provider/productprovider.dart';
 import 'package:mutu/provider/profile.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mutu/provider/welcomeprovider.dart';
@@ -17,6 +18,7 @@ Future<void> main(List<String> args) async {
         Provider(create: ((context) => Profile())),
         Provider(create: ((context) => Saleform())),
         Provider(create: ((context) => Welcomeprovider())),
+        Provider(create: ((context) => Productprovider())),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

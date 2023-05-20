@@ -138,7 +138,9 @@ class _SaleState extends State<Sale> {
                       ),
                       dropdownColor: Color(0xFF7B8FA1),
                       value: select_item_cat,
-                      items: context.read<Saleform>().getitems_cat
+                      items: context
+                          .read<Saleform>()
+                          .getitems_cat
                           .map((item) => DropdownMenuItem(
                               value: item,
                               child: Text(item,
@@ -161,11 +163,9 @@ class _SaleState extends State<Sale> {
                     validator: MultiValidator([
                       RequiredValidator(
                           errorText: 'Please input price of your product'),
-                      PatternValidator(r'^([0-9])+$',
-                          errorText: 'Only numberic')
                     ]),
                     onSaved: (String? price) {
-                      formsale.set_price(int.tryParse(price!)!);
+                      formsale.set_price(price!);
                     },
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -215,7 +215,9 @@ class _SaleState extends State<Sale> {
                       ),
                       dropdownColor: Color(0xFF7B8FA1),
                       value: select_item_status,
-                      items: context.read<Saleform>().getitems_status
+                      items: context
+                          .read<Saleform>()
+                          .getitems_status
                           .map((item) => DropdownMenuItem(
                               value: item,
                               child: Text(item,

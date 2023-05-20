@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mutu/Pages/address.dart';
 import 'package:mutu/Pages/my_store.dart';
-import 'package:mutu/Pages/payment/favorite.dart';
+import 'package:mutu/Pages/favorite.dart';
 import 'package:mutu/Pages/setting.dart';
 import 'package:mutu/Pages/registerandlogin/login.dart';
 import 'package:mutu/Pages/personnalinfo.dart';

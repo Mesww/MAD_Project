@@ -22,7 +22,7 @@ class Saleform extends ChangeNotifier {
   String name = '';
   String detail = '';
   String category = '';
-  int price = 0;
+  String price = '';
   String brand = '';
   String color = '';
   String durability = '';
@@ -41,7 +41,7 @@ class Saleform extends ChangeNotifier {
   String get getname => name;
   String get getdetail => detail;
   String get getcategory => category;
-  int get getprice => price;
+  String get getprice => price;
   String get getbrand => brand;
   String get getcolor => color;
   String get getdurability => durability;
@@ -62,7 +62,7 @@ class Saleform extends ChangeNotifier {
     notifyListeners();
   }
 
-  void set_price(int price) {
+  void set_price(String price) {
     this.price = price;
     notifyListeners();
   }
