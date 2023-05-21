@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mutu/Pages/address.dart';
+import 'package:mutu/Pages/cart.dart';
 import 'package:mutu/Pages/my_store.dart';
 import 'package:mutu/Pages/favorite.dart';
 import 'package:mutu/Pages/setting.dart';
@@ -103,7 +104,11 @@ class _UserprofileState extends State<Userprofile> {
                     height: 15,
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushReplacement(context, 
+                      MaterialPageRoute(builder: (context)=> Cart())
+                      );
+                    },
                     child: Row(
                       children: [
                         Icon(

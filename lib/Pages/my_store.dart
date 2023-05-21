@@ -1,5 +1,6 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:mutu/Pages/cart.dart';
 import 'package:mutu/Pages/data_store.dart';
 import 'package:mutu/Pages/navigatorbar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -34,9 +35,20 @@ class _MyStoreState extends State<MyStore> {
                   color: Theme.of(context).primaryColor,
                 )),
             const SizedBox(width: 100.0),
-            FaIcon(
-              FontAwesomeIcons.shoppingBasket,
-              color: Theme.of(context).primaryColor,
+            IconButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Cart()));
+              },
+              icon: Padding(
+                padding: const EdgeInsets.only(left: 14,),
+                child: Icon(
+                  Icons.shopping_basket_rounded,
+                  color: Color(0xFFFFAD6A5),
+                ),
+              ),
             ),
           ],
         ),
