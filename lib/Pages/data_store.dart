@@ -174,11 +174,18 @@ class _DataInImageState extends State<DataInImage> {
                               showDialog(
                                   context: context,
                                   builder: ((context) => AlertDialog(
-                                        title: Text('Add to cart'),
+                                    backgroundColor: primaryColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)
+                                    ),
+                                        title: Text('Add to cart.'),
                                         actions: [
                                           ElevatedButton(
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: Colors.red,
+                                              shape:RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(10),
+                                              )
                                             ),
                                             child: Text(
                                               'CANCEL',
@@ -197,6 +204,12 @@ class _DataInImageState extends State<DataInImage> {
                                             },
                                           ),
                                           ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.blue,
+                                              shape:RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(10),
+                                              )
+                                            ),
                                               onPressed: () {
                                                 cart.doc(_selectedProduct).set({
                                                   'uid': context
