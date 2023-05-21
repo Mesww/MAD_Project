@@ -418,7 +418,7 @@ class _SaleState extends State<Sale> {
         'durability': formsale.getdurability,
         'userid': context.read<Profile>().getCurrentID(),
         'url': value,
-        'stage':false
+        'stage': true
       });
     });
     // print(urlDownloads);

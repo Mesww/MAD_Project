@@ -28,23 +28,25 @@ class _DataInImageState extends State<DataInImage> {
   String price = '';
   bool checkfav = false;
 
+  String _selectedProduct = '';
+
   Map<String, String> details = {'detail': ''};
   Map<String, dynamic> alldata = {};
-  CollectionReference _collectionRef =
-      FirebaseFirestore.instance.collection('products');
+  final _collectionRef = FirebaseFirestore.instance.collection('products');
   Future<void> _getdata(BuildContext context) async {
     final productProvider = context.read<Productprovider>();
     final selectedProduct = productProvider.getselectproduct;
     if (selectedProduct.isNotEmpty && selectedProduct.isNotEmpty) {
-      debugPrint(productProvider.getselectproduct);
+      debugPrint(selectedProduct);
 
       final snapshot = await FirebaseFirestore.instance
           .collection('products')
-          .doc(productProvider.getselectproduct)
+          .doc(selectedProduct)
           .get();
 
-      if (snapshot.exists) {
+      if (snapshot.exists && snapshot.data()!.isNotEmpty) {
         setState(() {
+          _selectedProduct = selectedProduct;
           debugPrint('${snapshot.data()}');
           alldata = snapshot.data()!;
           name = snapshot.data()!['name'];
@@ -53,9 +55,10 @@ class _DataInImageState extends State<DataInImage> {
           userid = snapshot.data()!['userid'];
           url = snapshot.data()!['url'];
           price = snapshot.data()!['price'];
-          debugPrint(
-              '${name} ${detail} ${category} ${userid} ${url} ${price} ');
-          context.read<Productprovider>().setlabel(Text("$price ฿",
+          debugPrint('${checkfav}');
+          // debugPrint(
+          //     '${name} ${detail} ${category} ${userid} ${url} ${price} ');
+          productProvider.setlabel(Text("$price ฿",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -75,16 +78,15 @@ class _DataInImageState extends State<DataInImage> {
 
   @override
   void initState() {
+    _getdata(context);
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getdata(context);
-    });
   }
 
   final fav = FirebaseFirestore.instance.collection('fav');
-  Future<void> deleteSubcollection(String parentDocumentId) async {
+  final cart = FirebaseFirestore.instance.collection('cart');
+  Future<void> deleteSubcollection(String? parentDocumentId) async {
     CollectionReference subCollectionRef =
-        fav.doc(parentDocumentId).collection('data');
+        fav.doc(parentDocumentId!).collection('data');
 
     QuerySnapshot querySnapshot = await subCollectionRef.get();
     for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
@@ -94,11 +96,10 @@ class _DataInImageState extends State<DataInImage> {
 
   @override
   Widget build(BuildContext context) {
-    final selectproduct = context.read<Productprovider>().getselectproduct;
     final primaryColor = Theme.of(context).primaryColor;
     const secondaryColor = Color.fromARGB(226, 123, 143, 161);
     final String prices = price;
-    debugPrint(price);
+    // debugPrint(price);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -114,8 +115,14 @@ class _DataInImageState extends State<DataInImage> {
         backgroundColor: const Color(0xFFCFB997),
         actions: <Widget>[
           IconButton(
-            onPressed: () {}, //<<ใส่ได้ กดไอคอนแล้วสินค้าจะเพิ่มในตะกร้า
-            icon: const Icon(Icons.add_shopping_cart_rounded),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => AboutDialog(
+                        children: [],
+                      ));
+            }, //<<ใส่ได้ กดไอคอนแล้วสินค้าจะเพิ่มในตะกร้า
+            icon: const Icon(Icons.shopping_cart_rounded),
           ),
         ],
       ),
@@ -143,29 +150,95 @@ class _DataInImageState extends State<DataInImage> {
                   ),
                 ),
               ),
-              Expanded(
-                flex: 5,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: SizedBox(
-                    height: 35,
-                    width: 200,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.add_shopping_cart_rounded,
-                          size: 19.0),
-                      label: const Text("Add to cart"), //ปุ่มด้านล่าง
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: primaryColor,
-                        backgroundColor: secondaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(80.0),
+              StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('cart')
+                      .where('idproduct', isEqualTo: _selectedProduct)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      CircularProgressIndicator();
+                    }
+                    return Expanded(
+                      flex: 5,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: SizedBox(
+                          height: 35,
+                          width: 200,
+                          child: ElevatedButton.icon(
+                            icon: const Icon(Icons.add_shopping_cart_rounded,
+                                size: 19.0),
+                            label: const Text("Add to cart"), //ปุ่มด้านล่าง
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: ((context) => AlertDialog(
+                                        title: Text('Add to cart'),
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.red,
+                                            ),
+                                            child: Text(
+                                              'CANCEL',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineSmall!
+                                                  .copyWith(
+                                                    color: Theme.of(context)
+                                                        .appBarTheme
+                                                        .backgroundColor,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                cart.doc(_selectedProduct).set({
+                                                  'uid': context
+                                                      .read<Profile>()
+                                                      .getCurrentID(),
+                                                  'idproduct': _selectedProduct,
+                                                }).then((value) {
+                                                  cart
+                                                      .doc(_selectedProduct)
+                                                      .collection('data')
+                                                      .add(alldata)
+                                                      .then((value) {
+                                                    _collectionRef
+                                                        .doc(_selectedProduct)
+                                                        .update({
+                                                      'stage': false
+                                                    }).then((value) => Navigator
+                                                            .pushReplacement(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            Navigatorbar())));
+                                                  });
+                                                });
+                                              },
+                                              child: Text('OK'))
+                                        ],
+                                      )));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: primaryColor,
+                              backgroundColor: secondaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(80.0),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              ),
+                    );
+                  }),
             ],
           ),
         ),
@@ -218,8 +291,7 @@ class _DataInImageState extends State<DataInImage> {
                 StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('fav')
-                        .where('idproduct',
-                            isEqualTo: selectproduct)
+                        .where('idproduct', isEqualTo: _selectedProduct)
                         .snapshots(),
                     builder: (context, snapshot) {
                       return ProductSlideBox(
@@ -235,50 +307,36 @@ class _DataInImageState extends State<DataInImage> {
                               ConnectionState.waiting) {
                             CircularProgressIndicator();
                           } else {
+                            //bugfavorite
                             if (snapshot.data!.docs.isNotEmpty) {
-                              fav
-                                  .doc(context
-                                      .read<Productprovider>()
-                                      .getselectproduct)
-                                  .delete()
-                                  .then(
-                                (value) {
-                                  deleteSubcollection(context
-                                      .read<Productprovider>()
-                                      .getselectproduct);
-                                  debugPrint('unlike');
-                                },
-                              );
                               context.read<Productprovider>().setcoloricon(
                                   Color.fromARGB(226, 123, 143, 161));
                               setState(() {
                                 checkfav = false;
                                 debugPrint('$checkfav');
                               });
+                              fav.doc(_selectedProduct).delete().then(
+                                (value) {
+                                  deleteSubcollection(_selectedProduct);
+                                  debugPrint('unlike');
+                                },
+                              );
                             } else {
-                              fav
-                                  .doc(context
-                                      .read<Productprovider>()
-                                      .getselectproduct)
-                                  .set({
-                                'uid': context.read<Profile>().getCurrentID(),
-                                'idproduct': context
-                                    .read<Productprovider>()
-                                    .getselectproduct,
-                              }).then((value) {
-                                fav
-                                    .doc(context
-                                        .read<Productprovider>()
-                                        .getselectproduct)
-                                    .collection('data')
-                                    .add(alldata);
-                              });
                               context
                                   .read<Productprovider>()
                                   .setcoloricon(Theme.of(context).primaryColor);
                               setState(() {
                                 checkfav = true;
                                 debugPrint('$checkfav');
+                              });
+                              fav.doc(_selectedProduct).set({
+                                'uid': context.read<Profile>().getCurrentID(),
+                                'idproduct': _selectedProduct,
+                              }).then((value) {
+                                fav
+                                    .doc(_selectedProduct)
+                                    .collection('data')
+                                    .add(alldata);
                               });
                               debugPrint('like');
                             }
@@ -356,9 +414,7 @@ class _DataInImageState extends State<DataInImage> {
                                       as Map<String, dynamic>;
                                   final image = data['url']!;
 
-                                  return context
-                                              .read<Productprovider>()
-                                              .getselectproduct !=
+                                  return _selectedProduct !=
                                           snapshot.data!.docs[index].id
                                       ? Padding(
                                           padding: const EdgeInsets.only(

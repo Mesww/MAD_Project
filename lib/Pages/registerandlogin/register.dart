@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mutu/Pages/navigatorbar.dart';
 import 'package:mutu/Pages/registerandlogin/login.dart';
+import 'package:mutu/Pages/registerandlogin/widget_tree.dart';
 import 'package:mutu/provider/profile.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,6 +27,12 @@ class _RegisterState extends State<Register> {
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   bool obscure_password = true;
   bool obscure_confirm = true;
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,20 +184,17 @@ class _RegisterState extends State<Register> {
                                     'urlprofile':
                                         'https://icons.iconarchive.com/icons/iconarchive/cute-animal/256/Cute-Cat-icon.png'
                                   });
+                                  verifyemail();
                                   Fluttertoast.showToast(
-                                          msg: 'Success',
-                                          gravity: ToastGravity.CENTER,
-                                          backgroundColor: Color(0xFFFAD6A5),
-                                          textColor: Color(0xFF344D67))
-                                      .then((value) {
-                                    formkey.currentState?.reset();
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                VerifyEmail()));
-                                  });
+                                            msg: 'please verify email ${value.user?.email}',
+                                            gravity: ToastGravity.CENTER,
+                                            backgroundColor: Color(0xFFFAD6A5),
+                                            textColor: Color(0xFF344D67))
+                                        .then((value) {
+                                      formkey.currentState?.reset();
+                                    
                                 });
+                                    });
                               } on FirebaseAuthException catch (e) {
                                 // print(e.code);
                                 // print(e.message);
@@ -237,5 +244,27 @@ class _RegisterState extends State<Register> {
             ),
           );
         });
+  }
+
+  final auth = FirebaseAuth.instance;
+  bool isEmailverified = false;
+  late User user_;
+  late Timer timer;
+  bool resent = false;
+  Future verifyemail() async {
+    final user_ = auth.currentUser!;
+    user_.sendEmailVerification();
+    timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      checkEmailVerified();
+    });
+  }
+
+  Future<void> checkEmailVerified() async {
+    user_ = auth.currentUser!;
+    await user_.reload();
+    if (user_.emailVerified) {
+      timer.cancel();
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context) => WidgetTree())));
+    }
   }
 }
