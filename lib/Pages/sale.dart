@@ -337,13 +337,19 @@ class _SaleState extends State<Sale> {
                                         height: 60,
                                         child: Icon(
                                           Icons.browse_gallery,
-                                          color: Theme.of(context).primaryColor,
+                                          color: Theme.of(context)
+                                              .appBarTheme
+                                              .backgroundColor,
                                         )),
                                     Text(
                                       'Gallery',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .headlineSmall,
+                                          .headlineSmall!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .appBarTheme
+                                                  .backgroundColor),
                                     )
                                   ],
                                 ),
@@ -375,13 +381,19 @@ class _SaleState extends State<Sale> {
                                         height: 60,
                                         child: Icon(
                                           Icons.camera_alt_rounded,
-                                          color: Theme.of(context).primaryColor,
+                                          color: Theme.of(context)
+                                              .appBarTheme
+                                              .backgroundColor,
                                         )),
                                     Text(
                                       'Camera',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .headlineSmall,
+                                          .headlineSmall!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .appBarTheme
+                                                  .backgroundColor),
                                     )
                                   ],
                                 ),

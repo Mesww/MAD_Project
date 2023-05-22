@@ -199,8 +199,7 @@ class _PersonnalinfoState extends State<Personnalinfo> {
                           ]),
                           Stack(alignment: Alignment.bottomRight, children: [
                             CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  imageprofilepath!),
+                              backgroundImage: NetworkImage(imageprofilepath!),
                               radius: 40,
                               backgroundColor: Theme.of(context).primaryColor,
                             ),
@@ -429,13 +428,19 @@ class _PersonnalinfoState extends State<Personnalinfo> {
                                         height: 60,
                                         child: Icon(
                                           Icons.browse_gallery,
-                                          color: Theme.of(context).primaryColor,
+                                          color: Theme.of(context)
+                                              .appBarTheme
+                                              .backgroundColor,
                                         )),
                                     Text(
                                       'Gallery',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .headlineSmall,
+                                          .headlineSmall!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .appBarTheme
+                                                  .backgroundColor),
                                     )
                                   ],
                                 ),
@@ -467,13 +472,19 @@ class _PersonnalinfoState extends State<Personnalinfo> {
                                         height: 60,
                                         child: Icon(
                                           Icons.camera_alt_rounded,
-                                          color: Theme.of(context).primaryColor,
+                                          color: Theme.of(context)
+                                              .appBarTheme
+                                              .backgroundColor,
                                         )),
                                     Text(
                                       'Camera',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .headlineSmall,
+                                          .headlineSmall!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .appBarTheme
+                                                  .backgroundColor),
                                     )
                                   ],
                                 ),
@@ -532,13 +543,19 @@ class _PersonnalinfoState extends State<Personnalinfo> {
                                         height: 60,
                                         child: Icon(
                                           Icons.browse_gallery,
-                                          color: Theme.of(context).primaryColor,
+                                          color: Theme.of(context)
+                                              .appBarTheme
+                                              .backgroundColor,
                                         )),
                                     Text(
                                       'Gallery',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .headlineSmall,
+                                          .headlineSmall!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .appBarTheme
+                                                  .backgroundColor),
                                     )
                                   ],
                                 ),
@@ -570,13 +587,19 @@ class _PersonnalinfoState extends State<Personnalinfo> {
                                         height: 60,
                                         child: Icon(
                                           Icons.camera_alt_rounded,
-                                          color: Theme.of(context).primaryColor,
+                                          color: Theme.of(context)
+                                              .appBarTheme
+                                              .backgroundColor,
                                         )),
                                     Text(
                                       'Camera',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .headlineSmall,
+                                          .headlineSmall!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .appBarTheme
+                                                  .backgroundColor),
                                     )
                                   ],
                                 ),

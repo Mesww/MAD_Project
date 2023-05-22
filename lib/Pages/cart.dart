@@ -6,6 +6,8 @@ import 'package:mutu/Pages/navigatorbar.dart';
 import 'package:mutu/provider/productprovider.dart';
 import 'package:mutu/provider/profile.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Cart extends StatefulWidget {
   const Cart({Key? key}) : super(key: key);
@@ -15,6 +17,15 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
+  Future<void> _openMap(String lat, String long) async {
+    String googleURL =
+        'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+    await canLaunchUrlString(googleURL)
+        ? await launchUrlString(googleURL)
+        : throw 'Could not laucnch $googleURL';
+  }
+
+
   Future<void> deleteSubcollection(String? parentDocumentId) async {
     CollectionReference subCollectionRef =
         firebase_sale.doc(parentDocumentId!).collection('data');
@@ -24,6 +35,25 @@ class _CartState extends State<Cart> {
       await documentSnapshot.reference.delete();
     }
   }
+
+  void launchEmailSubmission() async {
+    final Uri params = Uri(
+      scheme: 'mailto',
+      path: data['email'],
+      query:
+          'subject= Offers for ${data['name']} Price ${data['price']} THB &body=  ',
+    );
+    String url = params.toString();
+    // ignore: deprecated_member_use
+    if (await canLaunch(url)) {
+      // ignore: deprecated_member_use
+      await launch(url);
+    } else {
+      print('Could not launch $url');
+    }
+  }
+
+  late Map data;
 
   final firebase_sale = FirebaseFirestore.instance.collection('cart');
   final firebase_product = FirebaseFirestore.instance.collection('products');

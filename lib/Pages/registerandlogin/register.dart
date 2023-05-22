@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mutu/Pages/navigatorbar.dart';
 import 'package:mutu/Pages/registerandlogin/login.dart';
 import 'package:mutu/Pages/registerandlogin/widget_tree.dart';
@@ -27,6 +28,42 @@ class _RegisterState extends State<Register> {
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   bool obscure_password = true;
   bool obscure_confirm = true;
+
+  //Geolocation
+  Position? _position;
+  void _getCurrentLocation() async {
+    Position position = await _determinePosition();
+    _position = position;
+    print(_position);
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+
+  @override
+  initState() {
+    _getCurrentLocation();
+    super.initState();
+    debugPrint('$_position');
+  }
 
   @override
   void dispose() {
@@ -170,6 +207,10 @@ class _RegisterState extends State<Register> {
                                         email: user.get_email,
                                         password: user.get_password)
                                     .then((value) {
+                                  String lat =
+                                      _position!.latitude.toString().trim();
+                                  String long =
+                                      _position!.longitude.toString().trim();
                                   FirebaseFirestore.instance
                                       .collection('user')
                                       .doc(value.user?.uid)
@@ -179,6 +220,8 @@ class _RegisterState extends State<Register> {
                                     'about': '',
                                     'email': value.user?.email,
                                     'uid': value.user?.uid,
+                                    'lat': lat,
+                                    'long': long,
                                     'urlbackground':
                                         'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148907303.jpg?w=740&t=st=1681908736~exp=1681909336~hmac=5fdb1fbeecaf7427a7f2272c512478f9f439189687c9c4bfd9b1a9b2f9f6a2fc',
                                     'urlprofile':
@@ -186,15 +229,15 @@ class _RegisterState extends State<Register> {
                                   });
                                   verifyemail();
                                   Fluttertoast.showToast(
-                                            msg: 'please verify email ${value.user?.email}',
-                                            gravity: ToastGravity.CENTER,
-                                            backgroundColor: Color(0xFFFAD6A5),
-                                            textColor: Color(0xFF344D67))
-                                        .then((value) {
-                                      formkey.currentState?.reset();
-                                    
+                                          msg:
+                                              'please verify email ${value.user?.email}',
+                                          gravity: ToastGravity.CENTER,
+                                          backgroundColor: Color(0xFFFAD6A5),
+                                          textColor: Color(0xFF344D67))
+                                      .then((value) {
+                                    formkey.currentState?.reset();
+                                  });
                                 });
-                                    });
                               } on FirebaseAuthException catch (e) {
                                 // print(e.code);
                                 // print(e.message);
@@ -264,7 +307,8 @@ class _RegisterState extends State<Register> {
     await user_.reload();
     if (user_.emailVerified) {
       timer.cancel();
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context) => WidgetTree())));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: ((context) => WidgetTree())));
     }
   }
 }

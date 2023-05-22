@@ -6,6 +6,7 @@ import 'package:mutu/Pages/navigatorbar.dart';
 import 'package:mutu/provider/productprovider.dart';
 import 'package:mutu/provider/profile.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class DataInImage extends StatefulWidget {
   const DataInImage({Key? key}) : super(key: key);
@@ -26,6 +27,8 @@ class _DataInImageState extends State<DataInImage> {
   String? userid = '';
   String url = '';
   String price = '';
+  String lat = '';
+  String long = '';
   bool checkfav = false;
 
   String _selectedProduct = '';
@@ -36,15 +39,18 @@ class _DataInImageState extends State<DataInImage> {
   Future<void> _getdata(BuildContext context) async {
     final productProvider = context.read<Productprovider>();
     final selectedProduct = productProvider.getselectproduct;
-    if (selectedProduct.isNotEmpty && selectedProduct.isNotEmpty) {
+    if (selectedProduct != null && selectedProduct.isNotEmpty) {
       debugPrint(selectedProduct);
-
       final snapshot = await FirebaseFirestore.instance
           .collection('products')
           .doc(selectedProduct)
           .get();
 
-      if (snapshot.exists && snapshot.data()!.isNotEmpty) {
+      if (snapshot.exists && snapshot.data()!.isNotEmpty ) {
+        final user = await FirebaseFirestore.instance
+            .collection('user')
+            .doc(snapshot.data()!['userid'])
+            .get();
         setState(() {
           _selectedProduct = selectedProduct;
           debugPrint('${snapshot.data()}');
@@ -55,7 +61,9 @@ class _DataInImageState extends State<DataInImage> {
           userid = snapshot.data()!['userid'];
           url = snapshot.data()!['url'];
           price = snapshot.data()!['price'];
-          debugPrint('${checkfav}');
+          lat = user.data()!['lat'];
+          long = user.data()!['long'];
+          debugPrint('${lat}');
           // debugPrint(
           //     '${name} ${detail} ${category} ${userid} ${url} ${price} ');
           productProvider.setlabel(Text("$price ฿",
@@ -350,10 +358,11 @@ class _DataInImageState extends State<DataInImage> {
                 ),
 
                 ProductDetailsBox(
-                  title: "Product detail",
-                  description: "${detail}",
-                  details: details,
-                ),
+                    title: "Product detail",
+                    description: "${detail}",
+                    details: details,
+                    lat: lat,
+                    long: long),
 
                 Container(
                   width: double.infinity,
@@ -470,12 +479,24 @@ class ProductDetailsBox extends StatelessWidget {
   /// the [details] of the product as pair display below description
   final Map<String, String> details;
 
+  final String? lat;
+  final String? long;
+
   const ProductDetailsBox({
     super.key,
     required this.title,
     required this.description,
     required this.details,
+    required this.lat,
+    required this.long,
   });
+  Future<void> _openMap(String lat, String long) async {
+    String googleURL =
+        'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+    await canLaunchUrlString(googleURL)
+        ? await launchUrlString(googleURL)
+        : throw 'Could not laucnch $googleURL';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -560,6 +581,34 @@ class ProductDetailsBox extends StatelessWidget {
               }),
             );
           }),
+
+          Row(
+            children: [
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  ),
+                  onPressed: () {
+                    _openMap(lat!, long!);
+                  },
+                  child: Wrap(
+                    children: [
+                      Row(
+                        children: const [
+                          Icon(Icons.map_rounded),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Text('Open Google map for Location')
+                        ],
+                      )
+                    ],
+                  ))
+            ],
+          )
         ],
       ),
     );

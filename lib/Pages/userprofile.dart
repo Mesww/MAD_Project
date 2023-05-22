@@ -49,7 +49,7 @@ class _UserprofileState extends State<Userprofile> {
                               child: Image.network(
                                 data['urlbackground'],
                                 fit: BoxFit.cover,
-                              ),  
+                              ),
                             ),
                           ),
                           CircleAvatar(
@@ -105,9 +105,8 @@ class _UserprofileState extends State<Userprofile> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushReplacement(context, 
-                      MaterialPageRoute(builder: (context)=> Cart())
-                      );
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => Cart()));
                     },
                     child: Row(
                       children: [
@@ -157,34 +156,34 @@ class _UserprofileState extends State<Userprofile> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: ((context) => Address())));
-                    },
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.car_rental,
-                          size: 30,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Edit address',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall!
-                              .copyWith(fontSize: 15),
-                        )
-                      ],
-                    ),
-                  ),
+                  // SizedBox(
+                  //   height: 15,
+                  // ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.pushReplacement(context,
+                  //         MaterialPageRoute(builder: ((context) => Address())));
+                  //   },
+                  //   child: Row(
+                  //     children: [
+                  //       Icon(
+                  //         Icons.car_rental,
+                  //         size: 30,
+                  //         color: Theme.of(context).primaryColor,
+                  //       ),
+                  //       SizedBox(
+                  //         width: 10,
+                  //       ),
+                  //       Text(
+                  //         'Edit address',
+                  //         style: Theme.of(context)
+                  //             .textTheme
+                  //             .headlineSmall!
+                  //             .copyWith(fontSize: 15),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
                   SizedBox(
                     height: 15,
                   ),
