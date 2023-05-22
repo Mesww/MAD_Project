@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -418,7 +419,7 @@ class _SaleState extends State<Sale> {
     });
 
     final snapshot = await uploadTask!.whenComplete(() {});
-
+    final user = FirebaseAuth.instance.currentUser;
     final urlDownloads = await snapshot.ref.getDownloadURL().then((value) {
       salecollection.add({
         'name': formsale.getname,
@@ -428,7 +429,8 @@ class _SaleState extends State<Sale> {
         'brand': formsale.getbrand,
         'color': formsale.getcolor,
         'durability': formsale.getdurability,
-        'userid': context.read<Profile>().getCurrentID(),
+        'useremail': user!.email,
+        'userid': user.uid,
         'url': value,
         'stage': true
       });

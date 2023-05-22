@@ -79,7 +79,7 @@ class _WelcomeState extends State<Welcome> {
                       SizedBox(
                         width: double.infinity,
                         child: Text(
-                          'NEAR YOUR AREA',
+                          'PRODUCT YOU MAY LIKE',
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium

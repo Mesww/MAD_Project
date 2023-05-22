@@ -25,7 +25,6 @@ class _CartState extends State<Cart> {
         : throw 'Could not laucnch $googleURL';
   }
 
-
   Future<void> deleteSubcollection(String? parentDocumentId) async {
     CollectionReference subCollectionRef =
         firebase_sale.doc(parentDocumentId!).collection('data');
@@ -36,31 +35,47 @@ class _CartState extends State<Cart> {
     }
   }
 
-  void launchEmailSubmission() async {
-    final Uri params = Uri(
-      scheme: 'mailto',
-      path: data['email'],
-      query:
-          'subject= Offers for ${data['name']} Price ${data['price']} THB &body=  ',
-    );
-    String url = params.toString();
-    // ignore: deprecated_member_use
-    if (await canLaunch(url)) {
-      // ignore: deprecated_member_use
-      await launch(url);
-    } else {
-      print('Could not launch $url');
+  List<Map> emailsend = [];
+  void launchEmailSubmission(Map data) async {
+    final String email = data['email'];
+    final String name = data['name'];
+    final String price = data['price'];
+
+    if (email != null && name != null && price != null) {
+      final Uri params = Uri(
+        scheme: 'mailto',
+        path: email,
+        queryParameters: {
+          'subject': 'Offers for $name Price $price THB',
+          'body': '',
+        },
+      );
+      String url = Uri.encodeFull(params.toString());
+
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        print('Could not launch $url');
+      }
     }
   }
 
-  late Map data;
-
   final firebase_sale = FirebaseFirestore.instance.collection('cart');
   final firebase_product = FirebaseFirestore.instance.collection('products');
+  final user = FirebaseFirestore.instance.collection('user');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF7B8FA1),
+      // floatingActionButton: FloatingActionButton(
+      //     child: Icon(Icons.send),
+      //     onPressed: () {
+      //       for (var element in emailsend) {
+      //         launchEmailSubmission(element);
+      //       }
+      //       debugPrint('${emailsend}');
+      //       emailsend.clear();
+      //     }),
       appBar: AppBar(
         centerTitle: true,
         title: Row(
@@ -141,6 +156,15 @@ class _CartState extends State<Cart> {
                         itemBuilder: (context, index) {
                           final String docid = datadoc[index].id;
                           final data = datadoc[index];
+                          if (data['name'] != null &&
+                              data['useremail'] != null &&
+                              data['price'] != null) {
+                            emailsend.add({
+                              'name': data['name'],
+                              'email': data['useremail'],
+                              'price': data['price']
+                            });
+                          }
                           return GestureDetector(
                             onTap: () {
                               context
@@ -180,7 +204,7 @@ class _CartState extends State<Cart> {
                                         ),
                                   ),
                                   subtitle: Text(
-                                    'category: ${data['category']}',
+                                    'Email : ${data['useremail']} ',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineSmall!

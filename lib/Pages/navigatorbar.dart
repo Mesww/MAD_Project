@@ -14,7 +14,7 @@ class Navigatorbar extends StatefulWidget {
 }
 
 class _NavigatorbarState extends State<Navigatorbar> {
-  final screen = [Welcome(), Sale(), Chat(), Userprofile()];
+  final screen = [Welcome(), Sale(), Userprofile()];
 
   final items = const [
     Icon(
@@ -23,10 +23,6 @@ class _NavigatorbarState extends State<Navigatorbar> {
     ),
     Icon(
       Icons.shopping_cart,
-      size: 30,
-    ),
-    Icon(
-      Icons.chat_bubble,
       size: 30,
     ),
     Icon(

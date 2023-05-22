@@ -46,7 +46,7 @@ class _DataInImageState extends State<DataInImage> {
           .doc(selectedProduct)
           .get();
 
-      if (snapshot.exists && snapshot.data()!.isNotEmpty ) {
+      if (snapshot.exists && snapshot.data()!= null ) {
         final user = await FirebaseFirestore.instance
             .collection('user')
             .doc(snapshot.data()!['userid'])
