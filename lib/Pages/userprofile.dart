@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mutu/Pages/address.dart';
 import 'package:mutu/Pages/cart.dart';
+import 'package:mutu/Pages/contact.dart';
 import 'package:mutu/Pages/my_store.dart';
 import 'package:mutu/Pages/favorite.dart';
 import 'package:mutu/Pages/setting.dart';
@@ -243,17 +244,17 @@ class _UserprofileState extends State<Userprofile> {
                     ),
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 20,
                   ),
                   GestureDetector(
                     onTap: () {
                       Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: ((context) => Setting())));
+                          MaterialPageRoute(builder: ((context) => Contact())));
                     },
                     child: Row(
                       children: [
                         Icon(
-                          Icons.settings,
+                          Icons.info,
                           size: 30,
                           color: Theme.of(context).primaryColor,
                         ),
@@ -261,18 +262,43 @@ class _UserprofileState extends State<Userprofile> {
                           width: 10,
                         ),
                         Text(
-                          'Setting',
+                          'About',
                           style: Theme.of(context)
                               .textTheme
                               .headlineSmall!
                               .copyWith(fontSize: 15),
-                        )
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
                       ],
                     ),
                   ),
                   SizedBox(
                     height: 20,
                   ),
+
+                  GestureDetector(
+                    onTap: () {
+                      auth.signOut().then((value) => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => Login())));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                          child: Text(
+                        'Login Out',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall!
+                            .copyWith(color: Color(0xFF344D67), fontSize: 15),
+                      )),
+                    ),
+                  )
                 ],
               ),
             )),

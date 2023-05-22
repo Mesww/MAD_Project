@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mutu/Pages/navigatorbar.dart';
-import 'package:mutu/Pages/setting.dart';
 
 class Contact extends StatefulWidget {
   const Contact({Key? key}) : super(key: key);
@@ -23,8 +22,10 @@ class _ContactState extends State<Contact> {
           children: [
             IconButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: ((context) => Setting())));
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => Navigatorbar())));
                 },
                 icon: Icon(Icons.arrow_back)),
             IconButton(
